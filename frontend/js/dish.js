@@ -112,7 +112,7 @@ function detailQtyControl(dish) {
     return html`<div class="qty-row big">
       <button class="qty-btn" data-detail="dec" aria-label="One less">&minus;</button>
       <span class="qty-value">${qty}</span>
-      <button class="qty-btn" data-detail="inc" aria-label="One more">+</button>
+      <button class="qty-btn" data-detail="inc" aria-label="One more"${raw(qty >= dish.stock ? 'disabled' : '')}>+</button>
       <button class="ghost-btn" data-detail="view">View cart</button>
     </div>`;
   }

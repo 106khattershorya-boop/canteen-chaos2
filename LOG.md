@@ -45,7 +45,17 @@
 **Time:** About 30 minutes, mostly spent checking the tablet-specific CSS and finding what was blocking the clicks.
 
 
+### C-06 — "Orders can exceed stock"
 
+**Reproduced:** The cart quantity could be increased beyond the available stock, allowing users to order more than what was available.
+
+**Cause:** The validation checked if a dish was sold out but didn't properly stop orders when the requested quantity exceeded the remaining stock.
+
+**Fix:** Added stock checks in `logic/validation.js` and `reserveStock()`. Also checked `addToCart()` in `frontend/js/state.js` and the quantity controls in `menu.js`, `dish.js` and `cart.js` to prevent users from exceeding the stock limit.
+
+**Checked:** Traced the menu and cart controls and checked why the debug message wasn't showing when testing the cart's `+` button. Full testing of the frontend controls and backend validation is still pending.
+
+**Time:** About 1 hour, mostly spent tracing the stock validation logic and checking how the cart quantity controls work.
 
 
 

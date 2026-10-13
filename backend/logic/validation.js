@@ -38,6 +38,7 @@ function validateLine(item, index, menu, now, seen) {
   if (blocked && isServedNow(dish, now) === false) errors.push(`${dish.name}: ${blocked}`);
   else if (dish.disabled) errors.push(`${dish.name} is off the menu today`);
   else if (Number(dish.stock) <= 0) errors.push(`${dish.name} is sold out`);
+  else if (qty > Number(dish.stock)) errors.push(`${dish.name}: only ${dish.stock} left`);
 
   return errors;
 }
@@ -108,6 +109,7 @@ function reserveStock(items, menu) {
   items.forEach((item) => {
     const dish = next.find((d) => d.id === Number(item.dishId));
     if (!dish) return errors.push(`dish ${item.dishId} vanished`);
+    if (item.qty > Number(dish.stock)) return errors.push(`${dish.name}: only ${dish.stock} left`);
     dish.stock -= item.qty;
   });
 

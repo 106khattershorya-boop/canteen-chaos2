@@ -43,7 +43,7 @@ function renderCartLines() {
           <div class="cart-line-actions">
             <button class="qty-btn small" data-cart="dec" aria-label="One less ${name}">&minus;</button>
             <span class="qty-value">${qty}</span>
-            <button class="qty-btn small" data-cart="inc" aria-label="One more ${name}">+</button>
+            <button class="qty-btn small" data-cart="inc" aria-label="One more ${name}" ${raw(dish && qty >= dish.stock ? 'disabled' : '')}>+</button>
             <button class="link-btn" data-cart="remove">Remove</button>
           </div>
         </div>`;
