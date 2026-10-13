@@ -58,4 +58,17 @@
 **Time:** About 1 hour, mostly spent tracing the stock validation logic and checking how the cart quantity controls work.
 
 
+### CC-07 — "Cancelling an order reduces stock again"
+
+**Reproduced:** When an order was cancelled, the stock decreased instead of going back up. Pav Bhaji stock went from 25 to 21 and then 17, meaning 4 units were deducted again each time.
+
+**Cause:** The `releaseStock()` function in `logic/validation.js` was using subtraction instead of addition, so cancelling an order reduced the stock further.
+
+**Fix:** Changed the `-` operator to `+` in `releaseStock()` so the cancelled order's quantity gets added back to the available stock.
+
+**Checked:** Checked `reserveStock()` to confirm that stock should decrease when an order is placed, then fixed the operator in `releaseStock()`. Full testing of cancellation and repeated cancellations is still pending.
+
+**Time:** About 5 minutes, mostly spent tracing the stock update logic and fixing the incorrect operator.
+
+
 
