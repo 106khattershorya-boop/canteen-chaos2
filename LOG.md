@@ -45,6 +45,18 @@
 **Time:** About 30 minutes, mostly spent checking the tablet-specific CSS and finding what was blocking the clicks.
 
 
+### CC-05 — "Mobile sticky filters bug"
+
+**Reproduced:** Opened the menu at mobile width and scrolled through the dishes. The category bar wasn't staying visible while scrolling.
+
+**Cause:** The `.view { overflow-x: hidden; }` rule was interfering with the sticky positioning of the filter bar.
+
+**Fix:** Removed that rule from the mobile section in `frontend/style.css` without changing the other styles.
+
+**Checked:** Scrolled through the menu again and confirmed that the filter bar stays visible. 
+
+**Time:** About 20 minutes, mostly spent checking the mobile CSS and figuring out why the sticky bar wasn't working.
+
 ### C-06 — "Orders can exceed stock"
 
 **Reproduced:** The cart quantity could be increased beyond the available stock, allowing users to order more than what was available.
@@ -69,6 +81,9 @@
 **Checked:** Checked `reserveStock()` to confirm that stock should decrease when an order is placed, then fixed the operator in `releaseStock()`. Full testing of cancellation and repeated cancellations is still pending.
 
 **Time:** About 5 minutes, mostly spent tracing the stock update logic and fixing the incorrect operator.
+
+
+
 
 
 
