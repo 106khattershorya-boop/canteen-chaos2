@@ -98,7 +98,7 @@ function paginate(list, page = 1, limit = 12) {
   const items = list.slice(start, start + perPage);
 
   return {
-    items: list,
+    items,
     page: pageNum,
     limit: perPage,
     total: list.length,

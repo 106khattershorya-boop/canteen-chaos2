@@ -82,6 +82,33 @@
 
 **Time:** About 5 minutes, mostly spent tracing the stock update logic and fixing the incorrect operator.
 
+### CC-08 — "The expired coupon is still applying"
+
+**Reproduced:** Applied the `FRESHERS24` coupon on the cart. It still gave a Rs. 30 discount even though the coupon expired on 30 September 2024.
+
+**Cause:** The coupon validation was checking things like minimum order value and usage limit, but it wasn't checking the expiry date.
+
+**Fix:** Added an expiry date check in the existing coupon validation. Now, if the coupon has expired, it gets rejected with a discount of Rs. 0 and the message "This coupon has expired".
+
+**Checked:** Tested `FRESHERS24` through the cart quote API. It now returns `couponDiscount: 0` with the correct error message. Also checked that other valid coupons are still working fine.
+
+**Time:** 15 minutes, including testing the expired coupon and checking that valid coupons still work.
+
+
+### CC-09 — "The menu shows more dishes than it should"
+
+**Reproduced:** Opened the menu API and found that it was returning the full list of dishes instead of only the requested page.
+
+**Cause:** The pagination function was already slicing the list to get the required dishes, but the response was returning the original full list instead of the sliced list.
+
+**Fix:** Changed `items: list` to `items` in the pagination response, so only the dishes for the current page are returned.
+
+**Checked:** Tested the default menu request and confirmed that it returns 12 dishes. Also tested page 2 with a limit of 12 to check that the next batch loads correctly.
+
+**Time:** 10 minutes, including fixing the pagination response and testing the next batch of dishes.
+
+
+
 
 
 
