@@ -107,6 +107,17 @@
 
 **Time:** 10 minutes, including fixing the pagination response and testing the next batch of dishes.
 
+### CC-10 — "Sorting by price is backwards"
+
+**Reproduced:** Selected "Price: Low to High", but the most expensive dishes appeared first. Selecting "Price: High to Low" showed the cheapest dishes first.
+
+**Cause:** While fixing CC-09,I found the `SORTERS` object in `logic/search.js`. On checking it, we noticed that the comparison logic for both price sorting options was reversed.
+
+**Fix:** Swapped the comparison logic for `price-asc` and `price-desc` so low-to-high sorts from cheaper to more expensive, and high-to-low does the opposite.
+
+**Checked:** Tested both sorting options and confirmed that the dishes now appear in the correct price order.
+
+**Time:** 5 minutes, since I found the sorting issue while working on CC-09 and only needed to correct the two comparison functions and test both options.
 
 
 

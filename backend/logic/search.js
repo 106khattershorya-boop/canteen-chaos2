@@ -76,8 +76,8 @@ function suggest(menu, query, limit = 6) {
 }
 
 const SORTERS = {
-  'price-asc': (a, b) => b.price - a.price,
-  'price-desc': (a, b) => a.price - b.price,
+  'price-asc': (a, b) => a.price - b.price,
+  'price-desc': (a, b) => b.price - a.price,
   'rating-desc': (a, b) => b.rating - a.rating,
   'name-asc': (a, b) => a.name.localeCompare(b.name),
   'prep-asc': (a, b) => a.prepMinutes - b.prepMinutes,
