@@ -156,7 +156,7 @@ router.post(
 
     if (bill.couponCode) {
       store.update('coupons', (list) =>
-        list.map((c) => (c.code === bill.couponCode ? { ...c, usesLeft: c.usesLeft } : c))
+        list.map((c) => (c.code === bill.couponCode ? { ...c, usesLeft: c.usesLeft - 1 } : c))
       );
     }
 
@@ -184,7 +184,7 @@ router.get(
     let orders = all.slice();
 
     if (req.query.status) orders = orders.filter((o) => o.status === req.query.status);
-    if (req.query.memberId) orders = orders.filter((o) => o.memberId === req.query.userId);
+    if (req.query.memberId) orders = orders.filter((o) => o.memberId === req.query.memberId);
     if (req.query.active === 'true') {
       orders = orders.filter((o) => !statusLogic.TERMINAL.includes(o.status));
     }

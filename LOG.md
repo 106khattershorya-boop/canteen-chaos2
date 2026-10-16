@@ -1,7 +1,7 @@
 ### CC-01 —  "The search suggestions are behind everything"
 **Reproduction:** Opened the menu page and typed 'sa' into the search bar. The suggestions appeared, but their position relative to the category bar and other content needed fixing.
 
-**Root cause:** The '.search-wrap' element had a lower 'z-index' than the surrounding filters, so the suggestions could appear behind them even though
+**Cause:** The '.search-wrap' element had a lower 'z-index' than the surrounding filters, so the suggestions could appear behind them even though
  '.suggest-box' had a higher 'z-index'.
 
 **Fix:** Changed the 'z-index' of '.search-wrap' from 1 to 50 in 'frontend/style.css'.
@@ -43,7 +43,7 @@
 
 **Fix:** Added `pointer-events: none` to both overlays so clicks could reach the buttons underneath.
 
-**Checked:** The dimming effect on blocked dishes still works after the change.
+**Checked:** Confirmed the overlay positions using DevTools and verified that the fix allows pointer events to pass through the decorative elements.
 
 **Time:** About 30 minutes, mostly spent checking the tablet-specific CSS and finding what was blocking the clicks.
 
@@ -121,6 +121,32 @@
 **Checked:** Tested both sorting options and confirmed that the dishes now appear in the correct price order.
 
 **Time:** 5 minutes, since I found the sorting issue while working on CC-09 and only needed to correct the two comparison functions and test both options.
+
+
+### Extra Credit 1 — My Orders section was blank
+
+**How I noticed it:** While testing the website, I noticed that the My Orders section was completely blank even though the browser had saved orders. I checked the API response and then looked into the backend code.
+
+**Cause:** The code was checking `req.query.memberId` but using `req.query.userId` to filter the orders, so it was using the wrong parameter.
+
+**Fix:** Changed `req.query.userId` to `req.query.memberId` in the orders filter.
+
+**Checked:** Tested the API again and confirmed that it now returns 3 orders for the requested member. Also checked that all 3 orders are showing up in the My Orders section.
+
+**Time:** 10 minutes, including finding the issue, fixing the code and testing it again.
+
+
+### Extra Credit 2 — Coupon Usage Count Not Decreasing
+
+**How I noticed it:** While fixing CC-08 and testing the other coupons, I noticed that the remaining usage count of a coupon was not decreasing after placing an order.
+
+**Cause:** The coupon usage logic in `backend/routes/orders.routes.js` was keeping `usesLeft` unchanged instead of decrementing it after an order used the coupon.
+
+**Fix:** Updated the logic to decrease `usesLeft` by 1 for the coupon used in a successfully placed order.
+
+**Checked:** Tested the `BYTE10` coupon by placing an order and reloading the page. Confirmed that the updated remaining usage count was displayed.
+
+**Time:** 10 minutes, including identifying the issue during testing, fixing the logic, and verifying the result.
 
 
 
