@@ -1,5 +1,4 @@
-### CC-01 — Search suggestions overlap
-
+### CC-01 —  "The search suggestions are behind everything"
 **Reproduction:** Opened the menu page and typed 'sa' into the search bar. The suggestions appeared, but their position relative to the category bar and other content needed fixing.
 
 **Root cause:** The '.search-wrap' element had a lower 'z-index' than the surrounding filters, so the suggestions could appear behind them even though
@@ -12,7 +11,7 @@
 **Time**: About 20 minutes, mostly spent checking why the search suggestions were appearing behind the category bar and figuring out how to fix it.
 
 
-### CC-02 — "Dish names and prices are unreadable in dark mode"
+### CC-02 — "Can't read anything in dark mode"
 
 **Reproduced:** Switched to dark mode and opened the menu page. The dish names and prices were difficult to read on the dark cards.
 
@@ -22,15 +21,19 @@
 
 **Checked:** Checked the menu in both dark and light modes. The dish names and prices were readable in dark mode, and light mode still looked fine.
 
-**Time:** About 25 minutes, mostly spent finding the CSS rule responsible for the text color and checking how the theme variables worked.
+**Time:** About 10 minutes, mostly spent finding the CSS rule responsible for the text color and checking how the theme variables worked.
 
-### CC-03 — "Mobile menu overflow"
+### CC-03 — "The menu is wider than my phone"
 
-**What I tried:** Tested the website at 375 × 800 in Chrome DevTools and checked for navigation items going off-screen or overlapping.
+**Reproduced:** At a narrow mobile width, a long dish name made the name button extend beyond the available space inside the card, causing layout overflow.
 
-**Where I got to:** Couldn't reproduce the issue as the layout looked fine. Didn't change any CSS without finding the actual cause.
+**Cause:** The mobile CSS was using `width: max-content` for the name button, making it expand to fit the full dish name instead of staying within the available width.
 
-**Next steps:** Test different screen sizes, check the hamburger menu, and inspect the navigation CSS to find the issue.
+**Fix:** Changed the `.name-btn` width to `100%` in the mobile media query so it uses the available space and allows long names to wrap.
+
+**Checked:** Tested the layout at both 320px and 500px viewport widths and confirmed that the dish names wrap properly without causing horizontal overflow.
+
+**Time:** 10 minutes, including inspecting the element, updating the CSS and verifying the fix at both viewport widths.
 
 ### CC-04 — "The buttons don't work on my tablet"
 
@@ -45,19 +48,19 @@
 **Time:** About 30 minutes, mostly spent checking the tablet-specific CSS and finding what was blocking the clicks.
 
 
-### CC-05 — "Mobile sticky filters bug"
+### CC-05 — "The category bar scrolls away on my phone"
 
-**Reproduced:** Opened the menu at mobile width and scrolled through the dishes. The category bar wasn't staying visible while scrolling.
+**Reproduced:** Scrolled down the menu on mobile and found that the category and filter bar was disappearing while scrolling.
 
-**Cause:** The `.view { overflow-x: hidden; }` rule was interfering with the sticky positioning of the filter bar.
+**Cause:** The `overflow-x: hidden` rule inside the mobile media query was affecting the sticky behaviour of the filter bar. The `top` value also needed to be adjusted so the filters stayed below the full header.
 
-**Fix:** Removed that rule from the mobile section in `frontend/style.css` without changing the other styles.
+**Fix:** Changed `overflow-x: hidden` to `overflow-x: clip` and changed the filters' `top` value to `93px`.
 
-**Checked:** Scrolled through the menu again and confirmed that the filter bar stays visible. 
+**Checked:** Tested the changes and confirmed that the category and filter bar now stay visible below both header rows while scrolling on mobile.
 
-**Time:** About 20 minutes, mostly spent checking the mobile CSS and figuring out why the sticky bar wasn't working.
+**Time:** 15 minutes, including finding the issue, making the CSS changes and testing the fix.
 
-### C-06 — "Orders can exceed stock"
+### C-06 — "I ordered more than they had"
 
 **Reproduced:** The cart quantity could be increased beyond the available stock, allowing users to order more than what was available.
 
@@ -65,12 +68,12 @@
 
 **Fix:** Added stock checks in `logic/validation.js` and `reserveStock()`. Also checked `addToCart()` in `frontend/js/state.js` and the quantity controls in `menu.js`, `dish.js` and `cart.js` to prevent users from exceeding the stock limit.
 
-**Checked:** Traced the menu and cart controls and checked why the debug message wasn't showing when testing the cart's `+` button. Full testing of the frontend controls and backend validation is still pending.
+**Checked:** Traced the menu and cart controls and checked why the debug message wasn't showing when testing the cart's `+` button. Full testing of the frontend controls and backend validation is done.
 
 **Time:** About 1 hour, mostly spent tracing the stock validation logic and checking how the cart quantity controls work.
 
 
-### CC-07 — "Cancelling an order reduces stock again"
+### CC-07 — "Cancelling makes it worse"
 
 **Reproduced:** When an order was cancelled, the stock decreased instead of going back up. Pav Bhaji stock went from 25 to 21 and then 17, meaning 4 units were deducted again each time.
 
@@ -78,11 +81,11 @@
 
 **Fix:** Changed the `-` operator to `+` in `releaseStock()` so the cancelled order's quantity gets added back to the available stock.
 
-**Checked:** Checked `reserveStock()` to confirm that stock should decrease when an order is placed, then fixed the operator in `releaseStock()`. Full testing of cancellation and repeated cancellations is still pending.
+**Checked:** Checked `reserveStock()` to confirm that stock should decrease when an order is placed, then fixed the operator in `releaseStock()`.
 
 **Time:** About 5 minutes, mostly spent tracing the stock update logic and fixing the incorrect operator.
 
-### CC-08 — "The expired coupon is still applying"
+### CC-08 — "An old coupon still works"
 
 **Reproduced:** Applied the `FRESHERS24` coupon on the cart. It still gave a Rs. 30 discount even though the coupon expired on 30 September 2024.
 
